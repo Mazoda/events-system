@@ -12,17 +12,26 @@ return new class extends Migration {
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
-            $table->string('name', 255);
-            $table->text('description');
-            $table->string('location', 255);
-            $table->integer('capacity');
-            $table->boolean('is_published')->default(false);
-            $table->enum('status', ['draft', 'scheduled', 'cancelled', 'completed']);
 
-            $table->timestamp('start_date');
-            $table->timestamp('end_date');
+            // Multi-Tenancy Link
+            $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
+
+            // Event Details
+            $table->string('name', 255);
+            $table->text('description')->nullable();
+            $table->string('location', 255);
+            $table->unsignedInteger('capacity')->default(0);
+
+            // Status & Time
+            $table->boolean('is_published')->default(false);
+            $table->enum('status', ['draft', 'scheduled', 'cancelled', 'completed'])->default('draft');
+
+            $table->dateTime('start_date');
+            $table->dateTime('end_date')->nullable();
+
             $table->timestamps();
+
+            // Indexes
             $table->index('tenant_id');
             $table->index(['tenant_id', 'is_published']);
         });
