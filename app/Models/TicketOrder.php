@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasTenantScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TicketOrder extends Model
 {
-    use HasFactory;
+    use HasFactory,HasTenantScope;
 
     protected $table = 'ticket_orders';
 

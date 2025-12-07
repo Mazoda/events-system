@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\HasTenantScope;
 use Illuminate\Database\Eloquent\Model;
 
 class TicketType extends Model
 {
+    use HasTenantScope;
     protected $table = 'ticket_types';
     protected $fillable = [
         'tenant_id',
