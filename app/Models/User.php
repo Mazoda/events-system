@@ -69,10 +69,17 @@ class User extends Authenticatable
     }
     public function isTenantAdmin()
     {
+        if ($this->role === 'admin') {
+            return true;
+        }
+        return false;
 
     }
     public function isTenantUser()
     {
-
+        if ($this->role === 'user') {
+            return true;
+        }
+        return false;
     }
 }
