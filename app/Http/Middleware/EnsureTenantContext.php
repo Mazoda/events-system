@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Auth;
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Tenant;
 use Symfony\Component\HttpFoundation\Response;
 
 class EnsureTenantContext
@@ -29,6 +30,11 @@ class EnsureTenantContext
         // If the user is logged in but has no tenant_id, there's a configuration error.
         if (!$user->tenant_id) {
             abort(403, 'Access denied. User is not assigned to a tenant.');
+        }
+
+        $tenant = Tenant::query()->find($user->tenant_id);
+        if (!$tenant || !$tenant->is_active) {
+            abort(403, 'Access denied. Tenant is inactive.');
         }
         // Success: The user is authenticated, has a tenant_id, and is not a Super Admin.
         // The request can now proceed to the controller.

@@ -13,8 +13,7 @@ class TenantPolicy
      */
     public function viewAny(User $user): bool
     {
-        // Tenant Admins can view their own tenant profile (needed for dashboard context)
-        return $user->isTenantAdmin();
+        return $user->isSuperAdmin() || $user->isTenantAdmin();
     }
 
     /**
@@ -22,6 +21,9 @@ class TenantPolicy
      */
     public function view(User $user, Tenant $tenant): bool
     {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
         if ($user->isTenantAdmin()) {
             return $user->tenant_id === $tenant->id;
         }

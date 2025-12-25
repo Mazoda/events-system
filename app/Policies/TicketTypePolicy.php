@@ -54,7 +54,7 @@ class TicketTypePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, TicketType $ticketType): bool|REsponse
+    public function delete(User $user, TicketType $ticketType): bool|Response
     {
         return ($user->isTenantAdmin() && $user->tenant_id === $ticketType->tenant_id)
             ? Response::allow()

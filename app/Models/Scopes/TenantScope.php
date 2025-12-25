@@ -3,7 +3,6 @@
 namespace App\Models\Scopes;
 
 use Auth;
-use Gate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -16,7 +15,16 @@ class TenantScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         $user = Auth::user();
-        if ($user && $user->tenant_id) {
+        if (!$user) {
+            return;
+        }
+
+        // Super admin (or any user without tenant assignment) sees across tenants.
+        if (!$user->tenant_id) {
+            return;
+        }
+
+        if ($user->tenant_id) {
             // 2. The user is a Tenant Admin or User, so filter records by their tenant_id.
             // This assumes the model being queried has a 'tenant_id' column.
             $builder->where($model->getTable() . '.tenant_id', $user->tenant_id);

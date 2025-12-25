@@ -26,10 +26,7 @@ class AttendeeTicket extends Model
         'is_scanned' => 'boolean',
         'scanned_at' => 'datetime',
     ];
-
-    // Tell Laravel that the reference_code should be handled as a UUID
-    protected $keyType = 'string';
-    public $incrementing = false;
+    // `id` is the primary key; `reference_code` is the public UUID lookup key.
 
     // ----------------------------------------------------------------------
     // RELATIONSHIPS
